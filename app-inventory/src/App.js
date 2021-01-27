@@ -50,6 +50,21 @@ const AvailableItems = () => {
 						>
 							add item
 						</button>
+						{cart[id] && (
+							<button
+								onClick={() => {
+									const copy = { ...cart };
+									if (copy[id] === 1) {
+										delete copy[id];
+										setCart(copy);
+									} else {
+										setCart({ ...copy, [id]: copy[id] - 1 });
+									}
+								}}
+							>
+								x
+							</button>
+						)}
 					</li>
 				))}
 			</ul>
