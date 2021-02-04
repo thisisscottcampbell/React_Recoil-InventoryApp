@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-	RecoilRoot,
-	atom,
-	selector,
-	useRecoilState,
-	useRecoilValue,
-} from 'recoil';
+import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 
 const inventory = {
 	a: { name: 'Yerba Mate', price: 10 },
@@ -29,12 +23,30 @@ const shippingState = atom({
 	default: 'US',
 });
 
+const totalsState = selector({
+	key: 'totalsState',
+	get: ({ get }) => {
+		const cart = get(cartState);
+		const shipping = get(shippingState);
+		const subTotal = Object.entries(cart).reduce(
+			(acc, [id, quantity]) => acc + inventory[id].price * quantity,
+			0
+		);
+		const shippingTotal = destinations[shipping];
+		return {
+			subTotal: subTotal,
+			shipping: shippingTotal,
+			total: subTotal + shippingTotal,
+		};
+	},
+});
+
 const App = () => {
 	return (
-		<RecoilRoot>
+		<div>
 			<AvailableItems />
 			<Cart />
-		</RecoilRoot>
+		</div>
 	);
 };
 
@@ -43,7 +55,7 @@ const AvailableItems = () => {
 	return (
 		<div>
 			<h2>Available Items</h2>
-			<pre>{JSON.stringify(cart, null, 2)}</pre>
+			<pre>I am current state: {JSON.stringify(cart, null, 2)}</pre>
 			<ul>
 				{Object.entries(inventory).map(([id, { name, price }]) => (
 					<li key={id}>
@@ -83,6 +95,7 @@ const Cart = () => {
 			<h2>Cart</h2>
 			<CartItems />
 			<Shipping />
+			<Totals />
 		</div>
 	);
 };
@@ -120,6 +133,20 @@ const Shipping = () => {
 					</button>
 				))}
 			</h2>
+		</div>
+	);
+};
+
+const Totals = () => {
+	const totals = useRecoilValue(totalsState);
+	return (
+		<div>
+			<h3>Totals</h3>
+			<p>Subtotal: ${totals.subTotal.toFixed(2)}</p>
+			<p>Shipping: ${totals.shipping.toFixed(2)}</p>
+			<p>
+				<strong>Total: ${totals.total.toFixed(2)}</strong>
+			</p>
 		</div>
 	);
 };
