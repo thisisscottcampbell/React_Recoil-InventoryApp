@@ -7,7 +7,9 @@ import RecoilizeDebugger from 'recoilize';
 ReactDOM.render(
 	<RecoilRoot>
 		<RecoilizeDebugger />
+		{/* <React.StrictMode> */}
 		<App />
+		{/* </React.StrictMode> */}
 	</RecoilRoot>,
 	document.querySelector('#root')
 );

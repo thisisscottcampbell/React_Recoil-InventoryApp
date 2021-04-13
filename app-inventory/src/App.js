@@ -129,7 +129,7 @@ const Shipping = () => {
 						}}
 					>
 						{country} @ {price}
-						{country === shipping ? <span> 'WHAT?!'</span> : null}
+						{country === shipping ? <span> 'Desintation'</span> : null}
 					</button>
 				))}
 			</h2>
@@ -137,7 +137,7 @@ const Shipping = () => {
 	);
 };
 
-const Totals = () => {
+πonst Totals = () => {
 	const totals = useRecoilValue(totalsState);
 	return (
 		<div>
